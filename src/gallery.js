@@ -1,5 +1,7 @@
 import { createLayout } from "./layout";
 
+const BASE_URL = "http://localhost:3000";
+
 //
 // A photo gallery component.
 //
@@ -28,7 +30,7 @@ export function Gallery({ items, galleryWidth, targetRowHeight }) {
                             return (
                                 <img 
                                     key={item.thumb}
-                                    src={item.thumb} 
+                                    src={`${BASE_URL}${item.thumb}`} 
                                     />
                             );
                         })}
