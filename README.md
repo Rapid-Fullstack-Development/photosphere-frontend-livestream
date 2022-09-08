@@ -1,14 +1,17 @@
-# photo-gallery-tdd-livestream
+# photosphere-frontend-livestream
 
-A photo gallery frontend with a row-based layout algorithm that was developed via test driven development (TDD).
+The web-based frontend for the Photosphere application.
 
-This code was created during a [live stream](https://youtu.be/Xi8gVWzvm9s) to support the book [Rapid Fullstack Development](https://rapidfullstackdevelopment.com/).
+This code was created during a live stream to support the book [Rapid Fullstack Development](https://rapidfullstackdevelopment.com/).
 
 Follow on [Twitter](https://twitter.com/codecapers) for updates.
 
 ## Pre-reqs
 
 You need [Node.js](https://nodejs.org/) installed to run this code.
+
+You need to run the Photosphere backend for this to work, available here:
+https://github.com/Rapid-Fullstack-Development/photosphere-monolithic-backend-livestream
 
 ## Setup
 
