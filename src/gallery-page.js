@@ -2,7 +2,7 @@ import { Gallery } from "./gallery";
 import axios from "axios";
 import React from "react";
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = process.env.BASE_URL;
 
 //
 // Uncomment this for the full gallery test data.
@@ -55,6 +55,8 @@ export class GalleryPage extends React.Component {
         super(props);
 
         this.state = {};
+
+        this.containerRef = React.createRef();
     }
 
     async componentDidMount() {
@@ -63,16 +65,19 @@ export class GalleryPage extends React.Component {
 
         this.setState({
             items: response.data.assets,
+            galleryWidth: this.containerRef.current.clientWidth,
         });
     }
 
     render() {
         return (
-            <Gallery 
-                galleryWidth={600}
-                targetRowHeight={200}
-                items={this.state.items}
-                />
+            <div ref={this.containerRef}>
+                <Gallery 
+                    galleryWidth={this.state.galleryWidth}
+                    targetRowHeight={200}
+                    items={this.state.items}
+                    />
+            </div>
         );
     }
 }
