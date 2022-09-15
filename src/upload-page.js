@@ -1,7 +1,7 @@
 import axios from "axios";
 import React from "react";
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = process.env.BASE_URL;
 
 //
 // Loads a file to a data URL.
@@ -75,7 +75,7 @@ export class UploadPage extends React.Component {
                     "height": imageResolution.height,
                 },
             });
-            
+
             console.log(`...uploaded file ${file.name}.`);
         }
     };
