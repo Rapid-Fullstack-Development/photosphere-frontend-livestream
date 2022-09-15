@@ -3,6 +3,48 @@ import React from "react";
 
 const BASE_URL = "http://localhost:3000";
 
+//
+// Loads a file to a data URL.
+//
+function loadFile(file) { 
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.addEventListener('error', () => {
+            reject(new Error(`Error reading file ${file.name}.`));
+        });
+
+        reader.addEventListener('load', evt => {
+            resolve(evt.target.result)
+        });            
+        
+        reader.readAsDataURL(file);
+    });
+}
+
+//
+// Loads URL or source data to an image element.
+//
+function loadImage(imageSrc) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+            resolve(img);
+        };
+        img.src = imageSrc;
+    });
+}
+
+//
+// Gets the size of an image element.
+//
+async function getImageResolution(imageSrc) {
+    const image = await loadImage(imageSrc);
+    return {
+        width: image.width,
+        height: image.height,
+    };
+}
+
 export class UploadPage extends React.Component {
 
     constructor(props) {
@@ -19,15 +61,21 @@ export class UploadPage extends React.Component {
 
     onUploadFiles = async () => {
         for (const file of this.state.files) {
-            console.log(`Upload file ${file.name}...`);
+
+            const imageData = await loadFile(file);
+            const imageResolution = await getImageResolution(imageData);
+
+            console.log(`Upload file ${file.name} (${imageResolution.width}x${imageResolution.height})`);
+
             await axios.post(`${BASE_URL}/asset`, file, {
                 headers: {
                     "file-name": file.name,
                     "content-type": file.type,
-                    "width": 255,
-                    "height": 255,
+                    "width": imageResolution.width,
+                    "height": imageResolution.height,
                 },
             });
+            
             console.log(`...uploaded file ${file.name}.`);
         }
     };
