@@ -65,6 +65,19 @@ export class GalleryPage extends React.Component {
 
         this.setState({
             items: response.data.assets,
+        });
+
+        this.onResize();
+
+        window.addEventListener("resize", this.onResize);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.onResize);        
+    }
+
+    onResize = () => {
+        this.setState({
             galleryWidth: this.containerRef.current.clientWidth,
         });
     }
