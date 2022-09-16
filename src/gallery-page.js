@@ -1,6 +1,7 @@
 import { Gallery } from "./gallery";
 import axios from "axios";
 import React from "react";
+import InfiniteScroll from "react-infinite-scroller";
 
 const BASE_URL = process.env.BASE_URL;
 
@@ -54,19 +55,15 @@ export class GalleryPage extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {};
+        this.state = {
+            items: [],
+            hasMore: true,
+        };
 
         this.containerRef = React.createRef();
     }
 
     async componentDidMount() {
-
-        const response = await axios.get(`${BASE_URL}/assets`);
-
-        this.setState({
-            items: response.data.assets,
-        });
-
         this.onResize();
 
         window.addEventListener("resize", this.onResize);
@@ -82,14 +79,32 @@ export class GalleryPage extends React.Component {
         });
     }
 
+    onLoadMore = async () => {
+        const pageSize = 20;
+        const response = await axios.get(`${BASE_URL}/assets?skip=${this.state.items.length}&limit=${pageSize}`);
+        const items = this.state.items.concat(response.data.assets);
+
+        this.setState({
+            items: items,
+            loadMore: response.data.assets.length === pageSize,
+        });
+
+        console.log(`Loaded ${response.data.assets.length} more assets, now have ${items.length} assets.`);
+    };
+
     render() {
         return (
             <div ref={this.containerRef}>
-                <Gallery 
-                    galleryWidth={this.state.galleryWidth}
-                    targetRowHeight={200}
-                    items={this.state.items}
-                    />
+                <InfiniteScroll
+                    hasMore={this.state.hasMore}
+                    loadMore={this.onLoadMore}
+                    >
+                    <Gallery 
+                        galleryWidth={this.state.galleryWidth}
+                        targetRowHeight={200}
+                        items={this.state.items}
+                        />
+                </InfiniteScroll>
             </div>
         );
     }
